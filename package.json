@@ -1,0 +1,12 @@
+{
+  "name": "chat-uba",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "ingest": "node --env-file-if-exists=.env scripts/ingest.js",
+    "start": "node --env-file-if-exists=.env src/server.js"
+  },
+  "dependencies": {
+    "@google/genai": "^2.27.0"
+  }
+}

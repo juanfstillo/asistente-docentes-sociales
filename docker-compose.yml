@@ -1,0 +1,11 @@
+services:
+  chat-uba:
+    build: .
+    container_name: chat-uba
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "3000:3000"
+    volumes:
+      # El registro de consultas queda fuera del contenedor, para no perderlo al actualizar.
+      - ./data/logs:/app/data/logs

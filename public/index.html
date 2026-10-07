@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Asistente para docentes · Sociales UBA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Signika:wght@500;600&display=swap">
+<style>
+  /* Paleta y tipografías tomadas de cienciapolitica.sociales.uba.ar */
+  :root { --bg:#f5f3f5; --panel:#fff; --text:#313131; --muted:#6b6470; --accent:#92278f; --accent-dark:#580259; --header:#92278f; --header-text:#fff; --user:#f3e3f2; --border:#e3dbe3; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#150d15; --panel:#211521; --text:#ece6ec; --muted:#a99aa9; --accent:#d58ad2; --accent-dark:#e3a9e1; --header:#421140; --header-text:#fff; --user:#4a1848; --border:#3a2a3a; }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { background: var(--bg); color: var(--text); font: 16px/1.55 "Roboto", Arial, sans-serif; display: flex; flex-direction: column; }
+  header { padding: 16px; background: var(--header); color: var(--header-text); border-bottom: 4px solid var(--accent-dark); }
+  header > div { max-width: 760px; margin: 0 auto; }
+  header h1 { font: 600 20px/1.2 "Signika", "Roboto", Arial, sans-serif; letter-spacing: .01em; margin: 0; }
+  header p { margin: 4px 0 0; font-size: 13px; opacity: .88; }
+  main { flex: 1; overflow-y: auto; padding: 18px 16px; }
+  #log { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+  .msg { padding: 11px 14px; max-width: 88%; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .bot { background: var(--panel); border: 1px solid var(--border); border-left: 3px solid var(--accent); align-self: flex-start; }
+  .user { background: var(--user); align-self: flex-end; }
+  .msg a { color: var(--accent); }
+  .msg a:hover { color: var(--accent-dark); }
+  .examples { display: flex; flex-wrap: wrap; gap: 8px; }
+  .examples button { background: var(--panel); border: 1px solid var(--accent); color: var(--accent); padding: 7px 12px; font: inherit; font-size: 14px; cursor: pointer; }
+  .examples button:hover { background: var(--accent); color: #fff; }
+  form { border-top: 1px solid var(--border); background: var(--panel); padding: 12px 16px; }
+  .row { max-width: 760px; margin: 0 auto; display: flex; gap: 8px; }
+  textarea { flex: 1; resize: none; border: 1px solid var(--border); padding: 10px 12px; font: inherit; background: var(--bg); color: var(--text); }
+  textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+  form button { border: 0; padding: 0 20px; font: 600 15px "Signika", "Roboto", Arial, sans-serif; text-transform: uppercase; letter-spacing: .04em; background: var(--accent); color: #fff; cursor: pointer; }
+  form button:hover:not(:disabled) { background: var(--accent-dark); }
+  form button:disabled { opacity: .5; cursor: default; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Asistente para docentes · Sociales UBA</h1>
+    <p>No oficial. Responde en base a los instructivos publicados por la Facultad; verificá siempre en la fuente citada.</p>
+  </div>
+</header>
+<main id="scroll">
+  <div id="log">
+    <div class="msg bot">Hola. Preguntame cómo hacer un trámite o usar SIU Guaraní, el Campus Virtual o Teams.</div>
+    <div class="examples" id="examples">
+      <button type="button">¿Cómo cargo un acta de examen?</button>
+      <button type="button">¿Cómo pido un aula virtual?</button>
+      <button type="button">¿Cómo armo un cuestionario en el campus?</button>
+    </div>
+  </div>
+</main>
+<form id="form">
+  <div class="row">
+    <textarea id="input" rows="1" maxlength="2000" placeholder="Escribí tu consulta…" autofocus></textarea>
+    <button id="send">Enviar</button>
+  </div>
+</form>
+<script>
+  const log = document.getElementById("log");
+  const scroll = document.getElementById("scroll");
+  const form = document.getElementById("form");
+  const input = document.getElementById("input");
+  const send = document.getElementById("send");
+  const examples = document.getElementById("examples");
+  // Una conversación por pestaña; si el navegador bloquea el almacenamiento, igual funciona.
+  let sessionId;
+  try { sessionId = sessionStorage.getItem("sid"); } catch {}
+  if (!sessionId) {
+    // crypto.randomUUID solo existe en páginas con HTTPS; esto funciona también sin él.
+    sessionId = Array.from(crypto.getRandomValues(new Uint8Array(16)), (byte) => byte.toString(16).padStart(2, "0")).join("");
+    try { sessionStorage.setItem("sid", sessionId); } catch {}
+  }
+
+  function addMessage(role, text) {
+    const el = document.createElement("div");
+    el.className = "msg " + role;
+    el.textContent = text;
+    log.appendChild(el);
+    scroll.scrollTop = scroll.scrollHeight;
+    return el;
+  }
+
+  // Muestra la respuesta sin interpretar HTML: convierte las URL en enlaces y
+  // el Markdown básico que a veces usa el modelo (**negrita**, `código`, # títulos).
+  function render(el, text) {
+    el.textContent = "";
+    const clean = text
+      .replace(/^#{1,6}\s+(.+)$/gm, "**$1**")
+      .replace(/^(\s*)[*•]\s+/gm, "$1- ")
+      .replace(/(?<![*\w])\*(?![\s*])([^*\n]+?)(?<![\s*])\*(?![*\w])/g, "$1");
+    for (const part of clean.split(/(https?:\/\/[^\s<>"*`]+[^\s<>"*`.,;:)]|\*\*[^*\n]+\*\*|`[^`\n]+`)/)) {
+      if (!part) continue;
+      if (/^https?:\/\//.test(part)) {
+        const a = document.createElement("a");
+        a.href = part; a.textContent = part; a.target = "_blank"; a.rel = "noopener";
+        el.appendChild(a);
+      } else if (/^\*\*[^*\n]+\*\*$/.test(part)) {
+        const strong = document.createElement("strong");
+        strong.textContent = part.slice(2, -2);
+        el.appendChild(strong);
+      } else if (/^`[^`\n]+`$/.test(part)) {
+        el.appendChild(document.createTextNode(part.slice(1, -1)));
+      } else {
+        // Asteriscos sueltos (negrita a medio escribir mientras llega el texto).
+        el.appendChild(document.createTextNode(part.replace(/\*\*/g, "")));
+      }
+    }
+  }
+
+  async function ask(text) {
+    examples.remove();
+    addMessage("user", text);
+    const bubble = addMessage("bot", "…");
+    send.disabled = true;
+    let answer = "";
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ sessionId, message: text }),
+      });
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        answer += decoder.decode(value, { stream: true });
+        render(bubble, answer);
+        scroll.scrollTop = scroll.scrollHeight;
+      }
+    } catch {
+      answer = answer || "No se pudo conectar con el servidor. Probá de nuevo.";
+      render(bubble, answer);
+    }
+    send.disabled = false;
+    input.focus();
+  }
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const text = input.value.trim();
+    if (!text || send.disabled) return;
+    input.value = "";
+    ask(text);
+  });
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); form.requestSubmit(); }
+  });
+  examples.addEventListener("click", (event) => {
+    if (event.target.tagName === "BUTTON") ask(event.target.textContent);
+  });
+</script>
+</body>
+</html>

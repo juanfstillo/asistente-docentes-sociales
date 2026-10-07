@@ -1,0 +1,100 @@
+[
+  {
+    "id": "guarani-actas-examenes",
+    "title": "Carga de actas de exámenes (SIU Guaraní)",
+    "published": "2020-09",
+    "file": "202009_examenes.pdf",
+    "url": "https://www.sociales.uba.ar/wp-content/blogs.dir/219/files/2020/09/examenes.pdf"
+  },
+  {
+    "id": "guarani-actas-cursada",
+    "title": "Carga de actas de cursada (SIU Guaraní)",
+    "published": "2020-08",
+    "file": "202008_INSTRUCTIVO-Carga_de_nota_docente.pdf",
+    "url": "https://www.sociales.uba.ar/wp-content/blogs.dir/219/files/2020/08/INSTRUCTIVO-Carga_de_nota_docente.pdf"
+  },
+  {
+    "id": "guarani-mensajeria",
+    "title": "Uso de mensajería en SIU Guaraní",
+    "published": "2021-03",
+    "file": "202103_mensajeria.pdf",
+    "url": "https://www.sociales.uba.ar/wp-content/blogs.dir/219/files/2021/03/mensajeria.pdf"
+  },
+  {
+    "id": "campus-manual-inicial",
+    "title": "Campus Virtual: manual de uso inicial",
+    "published": "2026-08",
+    "file": "202608_Manual-campus-virtual-2026.pdf",
+    "url": "https://www.sociales.uba.ar/wp-content/blogs.dir/219/files/2026/08/Manual-campus-virtual-2026.pdf"
+  },
+  {
+    "id": "campus-solicitud-aulas",
+    "title": "Solicitud de Aulas Virtuales",
+    "published": "2020-08",
+    "file": "202008_Instructivo-Aulas-Virtuales.pdf",
+    "url": "https://www.sociales.uba.ar/wp-content/blogs.dir/219/files/2020/08/Instructivo-Aulas-Virtuales.pdf"
+  },
+  {
+    "id": "campus-cuestionario",
+    "title": "Campus Virtual: creación y configuración de un cuestionario",
+    "published": "2020-11",
+    "file": "202011_creacion-y-config-cuestionario.pdf",
+    "url": "https://www.sociales.uba.ar/wp-content/blogs.dir/219/files/2020/11/CREACI%C3%93N-Y-CONFIG-1.pdf"
+  },
+  {
+    "id": "campus-cloze",
+    "title": "Campus Virtual: ¿cómo crear preguntas con respuestas anidadas (Cloze)?",
+    "published": "2021-03",
+    "file": "202103_8.pdf",
+    "url": "https://www.sociales.uba.ar/wp-content/blogs.dir/219/files/2021/03/8.pdf"
+  },
+  {
+    "id": "campus-taller",
+    "title": "Campus Virtual: Taller",
+    "published": "2021-03",
+    "file": "202103_9.pdf",
+    "url": "https://www.sociales.uba.ar/wp-content/blogs.dir/219/files/2021/03/9.pdf"
+  },
+  {
+    "id": "campus-reportes",
+    "title": "Campus Virtual: Reportes",
+    "published": "2021-03",
+    "file": "202103_10.pdf",
+    "url": "https://www.sociales.uba.ar/wp-content/blogs.dir/219/files/2021/03/10.pdf"
+  },
+  {
+    "id": "campus-tarea",
+    "title": "Campus Virtual: uso de la tarea",
+    "published": "2026-03",
+    "file": "202603_Instructivo-tarea.pdf",
+    "url": "https://www.sociales.uba.ar/wp-content/blogs.dir/219/files/2026/03/Instructivo-tarea.pdf"
+  },
+  {
+    "id": "campus-copia-seguridad",
+    "title": "Campus Virtual: importar contenido, copia de seguridad y restaurar",
+    "published": "2026-03",
+    "file": "202603_Instructivocopiadeseguridad.pdf",
+    "url": "https://www.sociales.uba.ar/wp-content/blogs.dir/219/files/2026/03/Instructivocopiadeseguridad.pdf"
+  },
+  {
+    "id": "teams",
+    "title": "Uso de Microsoft Teams",
+    "published": "2020-11",
+    "file": "202011_instructivo.pdf",
+    "url": "https://www.sociales.uba.ar/wp-content/blogs.dir/219/files/2020/11/instructivo.pdf"
+  },
+  {
+    "id": "grabar-videos",
+    "title": "Recomendaciones para grabar videos con fines pedagógicos",
+    "published": "2022-03",
+    "file": "202203_grabarse-1.pdf",
+    "url": "https://www.sociales.uba.ar/wp-content/blogs.dir/219/files/2022/03/grabarse-1.pdf"
+  },
+  {
+    "id": "grabar-audios",
+    "title": "Recomendaciones para grabar audios con fines pedagógicos",
+    "published": "2021-06",
+    "file": "202106_grabarse2.pdf",
+    "url": "https://www.sociales.uba.ar/wp-content/blogs.dir/219/files/2021/06/grabarse2.pdf"
+  }
+]
